@@ -12,7 +12,7 @@ I wrote this short program hoping to practice some basic C++ concepts, like clas
 
 You can find a short video of a demonstration of my program running at the following link:
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/a9tYNDIIfbM)
 
 # Development Environment
 
