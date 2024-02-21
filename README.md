@@ -1,3 +1,5 @@
+![Banner](docs/banner.png)
+
 # Overview
 
 The program found in this repository is a Wordle solver. Wordle is a popular mobile game where the player is given a five letter word to guess within five tries.
