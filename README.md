@@ -16,6 +16,8 @@ You can find a short video of a demonstration of my program running at the follo
 
 [Software Demo Video](https://youtu.be/a9tYNDIIfbM)
 
+![Demo](docs/demo.gif)
+
 # Development Environment
 
 {Describe the tools that you used to develop the software}
