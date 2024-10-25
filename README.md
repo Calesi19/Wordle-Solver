@@ -20,10 +20,8 @@ You can find a short video of a demonstration of my program running at the follo
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
-For my program, I used Visual Studio 2022 as my IDE and C++ as the programming language.
+C++ as the programming language.
 
-{Describe the programming language that you used and any libraries.}
 I used the following C++ libraries to include some basic functionalities in my program:
 
 - iostream
