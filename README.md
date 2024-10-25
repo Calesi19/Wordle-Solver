@@ -18,6 +18,24 @@ You can find a short video of a demonstration of my program running at the follo
 
 ![Demo](docs/demo.gif)
 
+# How to Compile and Run
+
+Run the following command to compile the program:
+
+```bash
+
+g++ -o wordle_solver wordle_solver.cpp
+
+```
+
+To run the program, use the following command:
+
+```bash
+
+./wordle_solver
+
+```
+
 # Development Environment
 
 C++ as the programming language.
