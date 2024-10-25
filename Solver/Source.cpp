@@ -1,334 +1,348 @@
-
-
-#include <iostream>
-#include <list>
-#include <vector>
-#include <string>
-#include <fstream>
 #include <algorithm>
 #include <cstring>
-#include<string.h>
-
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-
 class Guess {
 
-    /*This class stores the user's guess and what the status of each letter was
-    when entered into the game. */
+  /*This class stores the user's guess and what the status of each letter was
+  when entered into the game. */
 
 private:
+  // User's guess gets stored here.
 
-    // User's guess gets stored here.
-
-    string guess;
+  string guess;
 
 public:
+  // Each letter that is marked green in the game, gets stored in this array in
+  // its respective position.
 
-    // Each letter that is marked green in the game, gets stored in this array in its respective position.
+  char knownLetters[5] = {'_', '_', '_', '_', '_'};
 
-    char knownLetters[5] = { '_', '_', '_', '_', '_' };
+  // Each letter that is marked yellow in the game, gets stored in this array in
+  // its respective position.
 
-    // Each letter that is marked yellow in the game, gets stored in this array in its respective position.
+  char unknownLetters[5] = {'_', '_', '_', '_', '_'};
 
-    char unknownLetters[5] = { '_', '_', '_', '_', '_' };
+  // Each letter that is marked grey in the game gets stored in this array in
+  // its respective position.
 
-    // Each letter that is marked grey in the game gets stored in this array in its respective position.
+  char notInUseLetters[5] = {'_', '_', '_', '_', '_'};
 
-    char notInUseLetters[5] = { '_', '_', '_', '_', '_' };
-    
+  void setGuess(string guess) {
 
-    void setGuess(string guess) {
+    // This sets the 'guess' attribute to the specified word.
 
-        // This sets the 'guess' attribute to the specified word. 
+    this->guess = guess;
+  }
 
-        this->guess = guess;
-    }
+  string getGuess() {
 
-    string getGuess() {
+    // This method returns the 'guess' attribute.
 
-        // This method returns the 'guess' attribute.
+    return this->guess;
+  }
 
-        return this->guess;
-    }
+  char *getKnownLetters() {
 
-    char* getKnownLetters() {
+    // This method returns array of all letters marked green in the game.
 
-        // This method returns array of all letters marked green in the game.
+    return this->knownLetters;
+  }
 
-        return this->knownLetters;
-    }
+  char *getUnknownLetters() {
 
-    char* getUnknownLetters() {
+    // This method returns array of all letters marked yellow in the game.
 
-        // This method returns array of all letters marked yellow in the game.
+    return this->unknownLetters;
+  }
 
-        return this->unknownLetters;
-    }
+  char *getNotInUseLetters() {
 
-    char* getNotInUseLetters() {
+    // This method returns array of all letters marked grey in the game.
 
-        // This method returns array of all letters marked grey in the game.
-
-        return this->notInUseLetters;
-    }
-
+    return this->notInUseLetters;
+  }
 };
-
 
 class Words {
 
-    /*This class stores the list of words we will be checking our 'guess' against. */
+  /*This class stores the list of words we will be checking our 'guess' against.
+   */
 
 public:
+  // This vector stores all the words.
 
-    // This vector stores all the words.
+  vector<string> words;
 
-    vector<string> words;
+  void populate(string filename) {
 
-    
+    // This method populates the empty vector attribute with the list of words,
+    // extracted from a local file.
 
-    void populate(string filename) {
+    fstream newfile;
+    newfile.open(
+        filename,
+        ios::in); // Open a file to perform write operation using file object.
+    if (newfile.is_open()) // Checks whether the file is open.
+    {
 
-        //This method populates the empty vector attribute with the list of words, extracted from a local file.
-
-        fstream newfile;
-        newfile.open(filename, ios::in);  // Open a file to perform write operation using file object.
-        if (newfile.is_open()) // Checks whether the file is open.
-        {
-            
-            string word;
-            while (getline(newfile, word)) { // Reads data from file object and put it into string.
-                words.push_back(word); // Appends word to vector.
-                
-            }
-            newfile.close(); // Close the file object.
-        }
+      string word;
+      while (getline(
+          newfile,
+          word)) { // Reads data from file object and put it into string.
+        words.push_back(word); // Appends word to vector.
+      }
+      newfile.close(); // Close the file object.
     }
+  }
 
-    void removeWord(int position) {
+  void removeWord(int position) {
 
-        // This method removes a word in a specified position in the vector.
+    // This method removes a word in a specified position in the vector.
 
-        this->words.erase(words.begin() + position);
+    this->words.erase(words.begin() + position);
+  }
+
+  void display() {
+
+    // This method displays every word in the vector.
+
+    for (int count = 1; count <= words.size(); count++) {
+      cout << (count) << ". " << words[count - 1] << endl;
     }
+  }
 
-    void display() {
+  void addWord(string word) {
 
-        // This method displays every word in the vector.
+    // This adds a word to the vector.
 
-        for (int count = 1; count <= words.size(); count++) {
-            cout << (count) << ". " << words[count-1] << endl;
-        }
-    }
+    this->words.push_back(word);
+  }
 
-    void addWord(string word) {
+  void overWrite(vector<string> newWords) {
 
-        // This adds a word to the vector.
+    // This overwrites the current list of words in the vector, with the list of
+    // words in a specified vector.
 
-        this->words.push_back(word);
-    }
+    this->words = newWords;
+  }
 
-    void overWrite(vector<string> newWords) {
+  vector<string> getWords() {
 
-        // This overwrites the current list of words in the vector, with the list of words in a specified vector.
+    // This method returns full vector of words.
 
-        this->words = newWords;
-    }
-
-    vector<string> getWords() {
-
-        // This method returns full vector of words.
-
-        return this->words;
-    }
-
+    return this->words;
+  }
 };
-
 
 void layoutLetters(string word, int position) {
 
-    // This function displays the guess, with an arrow pointing the letter in the specified position.
+  // This function displays the guess, with an arrow pointing the letter in the
+  // specified position.
 
-    cout << " - " << word[0] << " " << word[1] << " " << word[2] << " " << word[3] << " " <<  word[4] << " - " << endl;
-    if (position == 0) cout << "   ^\n   |" << endl;
-    else if (position == 1) cout << "     ^\n     |" << endl;
-    else if (position == 2) cout << "       ^\n       |" << endl;
-    else if (position == 3) cout << "         ^\n         |" << endl;
-    else if (position == 4) cout << "           ^\n           |" << endl;
+  cout << " - " << word[0] << " " << word[1] << " " << word[2] << " " << word[3]
+       << " " << word[4] << " - " << endl;
+  if (position == 0)
+    cout << "   ^\n   |" << endl;
+  else if (position == 1)
+    cout << "     ^\n     |" << endl;
+  else if (position == 2)
+    cout << "       ^\n       |" << endl;
+  else if (position == 3)
+    cout << "         ^\n         |" << endl;
+  else if (position == 4)
+    cout << "           ^\n           |" << endl;
 }
-
 
 void gather_feedback(Guess &guess) {
 
-    // This function allows the user to indicate the color status of each letter in their guess.
+  // This function allows the user to indicate the color status of each letter
+  // in their guess.
 
+  // 'positionColor' tracks which letter in which position had what color. "_"
+  // meaning the letter hasn't been assigned a status. "G" meaning green. "Y"
+  // meaning yellow. "B" meaning blank.
 
-    // 'positionColor' tracks which letter in which position had what color. "_" meaning the letter hasn't been assigned a status. "G" meaning green. "Y" meaning yellow. "B" meaning blank.
+  string positionColor[] = {"_", "_", "_", "_", "_"};
 
-    string positionColor[] = { "_", "_", "_", "_", "_" };
-    
+  string letterStatus;
 
+  cout << "Specify if position was green by typing 'G', yellow by typing 'Y', "
+          "or blank by typing 'B'. "
+       << endl;
 
+  int position = 0; // Position of letter in word we are currently handling.
 
-    string letterStatus;
+  while (position !=
+         5) { // iterates through each letter of the five letter guess.
 
-    cout << "Specify if position was green by typing 'G', yellow by typing 'Y', or blank by typing 'B'. " << endl;
+    // Display color status of each letter.
+    cout << " - " << positionColor[0] << " " << positionColor[1] << " "
+         << positionColor[2] << " " << positionColor[3] << " "
+         << positionColor[4] << endl;
 
+    // Display each letter with arrow point towards each.
+    layoutLetters(guess.getGuess(), position);
 
-    int position = 0; // Position of letter in word we are currently handling.
+    // Prompt for color status and transform input into uppercase.
+    cout << "> ";
+    cin >> letterStatus;
+    std::transform(letterStatus.begin(), letterStatus.end(),
+                   letterStatus.begin(), ::toupper);
 
+    // If letter is green, add letter to knownLetters array.
 
-    while (position != 5) { //iterates through each letter of the five letter guess.
-
-        //Display color status of each letter.
-        cout << " - " << positionColor[0] << " " << positionColor[1] << " " << positionColor[2] << " " << positionColor[3] << " " << positionColor[4] << endl;
-        
-        // Display each letter with arrow point towards each.
-        layoutLetters(guess.getGuess(), position);
-
-        // Prompt for color status and transform input into uppercase. 
-        cout << "> ";
-        cin >> letterStatus;
-        std::transform(letterStatus.begin(), letterStatus.end(), letterStatus.begin(), ::toupper);
-
-
-        // If letter is green, add letter to knownLetters array. 
-
-        if (letterStatus == "G") {
-            guess.knownLetters[position] = guess.getGuess()[position];
-            positionColor[position] = "G";
-        }
-
-        // If letter is yellow, add letter to unknownLetters array. 
-
-        else if (letterStatus == "Y") {
-            guess.unknownLetters[position] = guess.getGuess()[position];
-            positionColor[position] = "Y";
-        }
-
-        // If letter is grey, add letter to notInUseLetters array.
-
-        else if (letterStatus == "B") {
-            guess.notInUseLetters[position] = guess.getGuess()[position];
-            positionColor[position] = "X";
-        }
-        position++;
+    if (letterStatus == "G") {
+      guess.knownLetters[position] = guess.getGuess()[position];
+      positionColor[position] = "G";
     }
-    cout << " - " << positionColor[0] << " " << positionColor[1] << " " << positionColor[2] << " " << positionColor[3] << " " << positionColor[4] << endl;
-    layoutLetters(guess.getGuess(), 4);
+
+    // If letter is yellow, add letter to unknownLetters array.
+
+    else if (letterStatus == "Y") {
+      guess.unknownLetters[position] = guess.getGuess()[position];
+      positionColor[position] = "Y";
+    }
+
+    // If letter is grey, add letter to notInUseLetters array.
+
+    else if (letterStatus == "B") {
+      guess.notInUseLetters[position] = guess.getGuess()[position];
+      positionColor[position] = "X";
+    }
+    position++;
+  }
+  cout << " - " << positionColor[0] << " " << positionColor[1] << " "
+       << positionColor[2] << " " << positionColor[3] << " " << positionColor[4]
+       << endl;
+  layoutLetters(guess.getGuess(), 4);
 }
-
-
 
 void generatePossibleWords(Guess guess, Words words) {
-    
-    // Create vector to temporarily hold the words that have the designated Green status. Populate it with current list of words.
 
-    vector<string> possibleWords;
+  // Create vector to temporarily hold the words that have the designated Green
+  // status. Populate it with current list of words.
 
-    possibleWords = words.getWords();
+  vector<string> possibleWords;
 
-    
+  possibleWords = words.getWords();
 
-    for (int index = 0; index < 5; index++) { // Iterate through each letter in the word list.
+  for (int index = 0; index < 5;
+       index++) { // Iterate through each letter in the word list.
 
-        if (guess.getKnownLetters()[index] != '_') { // Only run the following code if there is a letter designated green status in the current position.
+    if (guess.getKnownLetters()[index] !=
+        '_') { // Only run the following code if there is a letter designated
+               // green status in the current position.
 
-            for (int i = 0; i < words.getWords().size(); i++) { // For every word in the list of words.
+      for (int i = 0; i < words.getWords().size();
+           i++) { // For every word in the list of words.
 
-                if (guess.getKnownLetters()[index] == words.getWords()[i][index]) { // If the current selected character is found in the word in the list, in the respectibe position, record the word.
+        if (guess.getKnownLetters()[index] ==
+            words.getWords()[i]
+                            [index]) { // If the current selected character is
+                                       // found in the word in the list, in the
+                                       // respectibe position, record the word.
 
-                    possibleWords.push_back(words.getWords()[i]);
-                }
-
-                if (i == words.getWords().size() - 1) { // If end of word list reached, overwrite word list with temporary list of words.
-
-                    words.overWrite(possibleWords);
-
-                    possibleWords.clear(); // Clear list of temporary words.
-
-                }
-            }
+          possibleWords.push_back(words.getWords()[i]);
         }
-    }
 
-    for (int index = 0; index < 5; index++) {   // For every character in the list of unknownLetters. (Letters designated yellow status)
-        if (guess.getUnknownLetters()[index] != '_') { // If letter is position isn't blank.
-            for (int i = 0; i < words.getWords().size(); i++) { // For every word in the word list...
-                if (words.getWords()[i].find(guess.getUnknownLetters()[index]) != std::string::npos) { // If character found in word from word list.
-                    ; // Pass
-                }
-                else { // Else, remove the word from the word list.
-                    words.removeWord(i);
-                    i--;
-                }
-            }
+        if (i == words.getWords().size() -
+                     1) { // If end of word list reached, overwrite word list
+                          // with temporary list of words.
+
+          words.overWrite(possibleWords);
+
+          possibleWords.clear(); // Clear list of temporary words.
         }
+      }
     }
+  }
 
-    for (int index = 0; index < 5; index++) { // For every character in the list of unknownLetters. (Letters designated blank status)
-        if (guess.getNotInUseLetters()[index] != '_') {  // If letter is position isn't blank.
-            for (int i = 0; i < words.getWords().size(); i++) { // For every word in the word list...
-
-                if (words.getWords()[i].find(guess.getNotInUseLetters()[index]) != std::string::npos) { // If character found in word from word list.
-                    words.removeWord(i); // Remove the word from the word list.
-                    i--;
-                }
-            }
+  for (int index = 0; index < 5;
+       index++) { // For every character in the list of unknownLetters. (Letters
+                  // designated yellow status)
+    if (guess.getUnknownLetters()[index] !=
+        '_') { // If letter is position isn't blank.
+      for (int i = 0; i < words.getWords().size();
+           i++) { // For every word in the word list...
+        if (words.getWords()[i].find(guess.getUnknownLetters()[index]) !=
+            std::string::npos) { // If character found in word from word list.
+          ;                      // Pass
+        } else {                 // Else, remove the word from the word list.
+          words.removeWord(i);
+          i--;
         }
+      }
     }
+  }
 
+  for (int index = 0; index < 5;
+       index++) { // For every character in the list of unknownLetters. (Letters
+                  // designated blank status)
+    if (guess.getNotInUseLetters()[index] !=
+        '_') { // If letter is position isn't blank.
+      for (int i = 0; i < words.getWords().size();
+           i++) { // For every word in the word list...
 
-    // Display list of words.
-
-    if (words.getWords().size() != 0) {
-        cout << "Possible Words:" << endl;
-
-        words.display();
+        if (words.getWords()[i].find(guess.getNotInUseLetters()[index]) !=
+            std::string::npos) { // If character found in word from word list.
+          words.removeWord(i);   // Remove the word from the word list.
+          i--;
+        }
+      }
     }
-    
-    else {
-        cout << "No possible words found." << endl;
-    }
+  }
+
+  // Display list of words.
+
+  if (words.getWords().size() != 0) {
+    cout << "Possible Words:" << endl;
+
+    words.display();
+  }
+
+  else {
+    cout << "No possible words found." << endl;
+  }
 }
-
-
-
 
 int main() {
 
-    // Initiliaze 'Words' class and populate it with words from list
-    
-    Words words; 
+  // Initiliaze 'Words' class and populate it with words from list
 
-    words.populate("words.txt");  
+  Words words;
 
-    // Initialize 'Guess' class and prompt user for word guess.
+  words.populate("words.txt");
 
-    string guess;
+  // Initialize 'Guess' class and prompt user for word guess.
 
-    Guess userGuess;
+  string guess;
 
-    while (guess.length() != 5) {
+  Guess userGuess;
 
-        cout << "What word did you choose? ";
-        cin >> guess;
-    }
+  while (guess.length() != 5) {
 
-    std::transform(guess.begin(), guess.end(), guess.begin(), ::toupper); // Transform user input to uppercase.
+    cout << "What word did you choose? ";
+    cin >> guess;
+  }
 
-    userGuess.setGuess(guess); // Store user's guess in guess class.
+  std::transform(guess.begin(), guess.end(), guess.begin(),
+                 ::toupper); // Transform user input to uppercase.
 
+  userGuess.setGuess(guess); // Store user's guess in guess class.
 
-    // Assign color status to each letter in the user's guess.
+  // Assign color status to each letter in the user's guess.
 
-    gather_feedback(userGuess); 
+  gather_feedback(userGuess);
 
-    // Display possible words based on color status of letters.
-    
-    generatePossibleWords(userGuess, words); 
+  // Display possible words based on color status of letters.
 
-	return 0;
+  generatePossibleWords(userGuess, words);
+
+  return 0;
 }
